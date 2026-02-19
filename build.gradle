@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+group = 'org.projects'
+version = '1.0-SNAPSHOT'
+description = 'Thread Safe LRU Cache with TTL, Stats and Cache Loader'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+
+    testImplementation 'org.awaitility:awaitility:4.2.0'
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize = '512m'
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = false
+        exceptionFormat = 'full'
+    }
+}
+
+
+jacoco {
+    toolVersion = '0.8.10'
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
